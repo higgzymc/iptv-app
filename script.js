@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // --- The server URL for your IPTV provider ---
     const SERVER_URL = 'http://cms3worldadventure.in';
-    // --- We no longer need a public CORS proxy constant ---
 
 
     // --- Element References ---
@@ -50,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return null;
         }
         
-        // 1. Construct the target URL that we want to fetch from the IPTV provider.
         const targetUrl = new URL(`${SERVER_URL}/player_api.php`);
         targetUrl.searchParams.append('username', username);
         targetUrl.searchParams.append('password', password);
@@ -60,13 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
             targetUrl.searchParams.append(key, params[key]);
         }
 
-        // 2. Construct the URL to our own proxy function.
-        // This path `/.netlify/functions/proxy` is automatically created by Netlify.
-        // We pass the real IPTV server URL as a query parameter called 'url'.
         const proxyUrl = `/.netlify/functions/proxy?url=${encodeURIComponent(targetUrl.toString())}`;
 
         try {
-            // 3. Fetch the data from our own proxy function.
             const response = await fetch(proxyUrl);
             if (!response.ok) {
                 throw new Error(`API request failed: ${response.status} ${response.statusText}`);
@@ -169,7 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
         epgDataCache = new Map();
         
         const targetEpgUrl = `${SERVER_URL}/xmltv.php?username=${username}&password=${password}`;
-        // Use our proxy for the EPG call as well.
         const proxyEpgUrl = `/.netlify/functions/proxy?url=${encodeURIComponent(targetEpgUrl)}`;
 
         try {
@@ -213,12 +206,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 channelPrograms.sort((a, b) => a.start - b.start);
             });
             console.log("EPG data cached successfully for", epgDataCache.size, "channels.");
-            // Clear the "Loading" message
             epgGrid.innerHTML = '<p>Select a channel to view its EPG.</p>';
 
         } catch (error) {
             console.error('Error caching EPG data:', error);
-            // Display a user-friendly error message in the EPG grid
             epgGrid.innerHTML = `<p class="error-message">Could not load EPG data. The provider's server may be temporarily down.</p>`;
         }
     }
@@ -271,9 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (stream.stream_icon) {
                     const img = document.createElement('img');
-                    img.src = stream.stream_icon;
+                    // FIX: Route insecure image URLs through our proxy to avoid mixed content errors.
+                    img.src = `/.netlify/functions/proxy?url=${encodeURIComponent(stream.stream_icon)}`;
                     img.alt = stream.name;
-                    // FIX: This will hide the broken image icon if the logo fails to load
                     img.onerror = (e) => { e.target.style.display='none'; }
                     channelItem.appendChild(img);
                 }
@@ -285,7 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.querySelectorAll('.channel-item').forEach(item => item.classList.remove('active'));
                     channelItem.classList.add('active');
                     currentActiveChannelId = stream.stream_id;
-                    // The video stream URL does NOT need the proxy
                     const streamUrl = `${SERVER_URL}/live/${username}/${password}/${stream.stream_id}.m3u8`;
                     playStream(streamUrl, stream.name);
                     displayEpgForChannel(stream.epg_channel_id);
