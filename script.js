@@ -165,6 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function cacheAllEpgData() {
         console.log("Fetching and caching all EPG data...");
+        epgGrid.innerHTML = '<p>Loading EPG data...</p>';
         epgDataCache = new Map();
         
         const targetEpgUrl = `${SERVER_URL}/xmltv.php?username=${username}&password=${password}`;
@@ -212,9 +213,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 channelPrograms.sort((a, b) => a.start - b.start);
             });
             console.log("EPG data cached successfully for", epgDataCache.size, "channels.");
+            // Clear the "Loading" message
+            epgGrid.innerHTML = '<p>Select a channel to view its EPG.</p>';
 
         } catch (error) {
             console.error('Error caching EPG data:', error);
+            // Display a user-friendly error message in the EPG grid
+            epgGrid.innerHTML = `<p class="error-message">Could not load EPG data. The provider's server may be temporarily down.</p>`;
         }
     }
 
@@ -268,6 +273,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const img = document.createElement('img');
                     img.src = stream.stream_icon;
                     img.alt = stream.name;
+                    // FIX: This will hide the broken image icon if the logo fails to load
                     img.onerror = (e) => { e.target.style.display='none'; }
                     channelItem.appendChild(img);
                 }
