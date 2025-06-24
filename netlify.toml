@@ -1,6 +1,7 @@
+# This sets the folder where Netlify will find your functions
 [build]
   functions = "netlify/functions"
 
-# Set a global timeout for all functions to 26 seconds
-[functions]
+# This specifically targets our "proxy" function and sets its timeout
+[functions.proxy]
   timeout = 26
