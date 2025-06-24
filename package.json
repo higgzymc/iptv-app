@@ -1,8 +1,7 @@
 {
-  "name": "iptv-player",
-  "version": "1.0.0",
-  "description": "A simple IPTV player",
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "firebase-admin": "^13.4.0"
   }
 }
