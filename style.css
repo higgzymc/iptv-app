@@ -1,0 +1,347 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #121212;
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+#app-container {
+    background-color: #1e1e1e;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    width: 95%;
+    max-width: 1600px;
+    margin: 20px auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.section {
+    display: none;
+    width: 100%;
+}
+
+.section.active {
+    display: block;
+}
+
+/* --- Login Section --- */
+#login-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+}
+
+#login-section h2 {
+    color: #bb86fc;
+}
+
+#login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 350px;
+    padding: 25px;
+    background-color: #2c2c2c;
+    border-radius: 8px;
+}
+
+#login-form label {
+    font-weight: 500;
+}
+
+#login-form input[type="text"],
+#login-form input[type="password"] {
+    padding: 12px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #3e3e3e;
+    color: #e0e0e0;
+    font-size: 1em;
+}
+
+#login-form button {
+    padding: 12px 20px;
+    background-color: #03dac6;
+    color: #000;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+#login-form button:hover {
+    background-color: #01bfa5;
+}
+
+.error-message {
+    color: #cf6679;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+/* --- Main IPTV Section --- */
+#main-iptv-section header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 15px;
+}
+
+#main-iptv-section h1 {
+    margin: 0;
+    color: #03dac6;
+}
+
+#logout-button {
+    padding: 8px 15px;
+    background-color: #cf6679;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.content-wrapper {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 20px;
+    grid-template-areas:
+        "sidebar video"
+        "sidebar channels"
+        "sidebar epg";
+}
+
+#categories-sidebar {
+    grid-area: sidebar;
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-radius: 8px;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+#categories-sidebar h3 {
+    margin-top: 0;
+    color: #bb86fc;
+}
+
+#category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#category-list li {
+    padding: 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    transition: background-color 0.2s ease;
+}
+
+#category-list li:hover {
+    background-color: #3e3e3e;
+}
+
+#category-list li.active {
+    background-color: #bb86fc;
+    color: #121212;
+    font-weight: bold;
+}
+
+.main-content {
+    display: contents; /* Allows children to be placed in grid */
+}
+
+#video-player-container {
+    grid-area: video;
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+
+#video-player {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+}
+
+#current-channel-info {
+    background: rgba(0,0,0,0.6);
+    padding: 15px;
+}
+
+#current-channel-name {
+    margin: 0;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+#channel-list-container {
+    grid-area: channels;
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-radius: 8px;
+    max-height: 400px; /* Increased height */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#channel-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#channel-list-header h3 {
+     margin: 0;
+     color: #e0e0e0;
+}
+
+#channel-search {
+    padding: 8px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #3e3e3e;
+    color: #e0e0e0;
+}
+
+
+#channel-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.channel-item {
+    background-color: #3e3e3e;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 120px;
+    padding: 10px;
+    border: 2px solid transparent;
+}
+
+.channel-item:hover {
+    transform: translateY(-4px);
+    background-color: #4a4a4a;
+}
+
+.channel-item.active {
+    border-color: #03dac6;
+    transform: translateY(-4px);
+}
+
+.channel-item img {
+    max-width: 50px;
+    max-height: 50px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    object-fit: contain;
+}
+
+.channel-item span {
+    font-size: 0.9em;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#epg-container {
+    grid-area: epg;
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-y: auto; /* Changed to vertical scroll */
+    max-height: 400px;
+}
+
+#epg-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+#epg-header h3 {
+     margin: 0;
+     color: #e0e0e0;
+}
+
+#epg-date-filter {
+    padding: 8px;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #3e3e3e;
+    color: #e0e0e0;
+}
+
+#epg-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.epg-entry {
+    background-color: #3e3e3e;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.epg-entry h4 {
+    margin: 0 0 5px 0;
+    color: #03dac6;
+}
+
+.epg-entry p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #b0b0b0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+     .content-wrapper {
+        grid-template-columns: 200px 1fr;
+     }
+}
+
+@media (max-width: 768px) {
+    .content-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+     #categories-sidebar {
+        max-height: 250px;
+     }
+     #channel-list-container, #epg-container {
+        max-height: 350px;
+     }
+}

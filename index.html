@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My IPTV App</title>
+    <!-- Link to the external CSS file -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Section for user login -->
+        <div id="login-section" class="section active">
+            <h2>Login to IPTV</h2>
+            <!-- The Server URL input has been removed from the form -->
+            <form id="login-form">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+
+                <button type="submit">Login</button>
+                <p id="login-error" class="error-message"></p>
+            </form>
+        </div>
+
+        <!-- Main section for IPTV content -->
+        <div id="main-iptv-section" class="section">
+            <header>
+                <h1>My IPTV</h1>
+                <button id="logout-button">Logout</button>
+            </header>
+
+            <div class="content-wrapper">
+                <nav id="categories-sidebar">
+                    <h3>Categories</h3>
+                    <ul id="category-list"></ul>
+                </nav>
+
+                <div class="main-content">
+                    <div id="video-player-container">
+                        <video id="video-player" controls autoplay></video>
+                        <div id="current-channel-info">
+                             <h4 id="current-channel-name">Select a channel to play</h4>
+                        </div>
+                    </div>
+
+                    <div id="channel-list-container">
+                        <div id="channel-list-header">
+                            <h3>Channels</h3>
+                            <input type="text" id="channel-search" placeholder="Search channels...">
+                        </div>
+                        <div id="channel-list"></div>
+                    </div>
+
+                    <div id="epg-container">
+                        <div id="epg-header">
+                            <h3>EPG (Electronic Program Guide)</h3>
+                            <input type="date" id="epg-date-filter">
+                        </div>
+                        <div id="epg-grid">
+                            <p>Select a channel to view its EPG.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- External library for HLS streaming -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <!-- Link to the external JavaScript file -->
+    <script src="script.js"></script>
+</body>
+</html>
