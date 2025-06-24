@@ -1,4 +1,6 @@
-# This file tells Netlify how to build and deploy your site.
 [build]
-  # This line specifies the directory where your serverless functions are located.
   functions = "netlify/functions"
+
+# Set a global timeout for all functions to 26 seconds
+[functions]
+  timeout = 26

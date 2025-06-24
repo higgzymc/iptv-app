@@ -1,10 +1,6 @@
-// This file acts as a serverless function on Netlify.
-// It takes a URL, fetches it on the server-side, and returns the data.
-// This avoids browser CORS errors.
 const fetch = require('node-fetch');
 
 exports.handler = async (event) => {
-  // Get the target URL from the `url` query parameter passed by the frontend.
   const targetUrl = event.queryStringParameters.url;
 
   if (!targetUrl) {
@@ -15,25 +11,40 @@ exports.handler = async (event) => {
   }
 
   try {
-    // Decode the URL and fetch it.
-    const response = await fetch(decodeURIComponent(targetUrl));
-    // Get the data as plain text to handle both JSON and XML responses.
+    const decodedUrl = decodeURIComponent(targetUrl);
+    // This log will help us debug in Netlify's function logs
+    console.log(`Proxying request to: ${decodedUrl}`);
+
+    // Fetch the data from the IPTV server
+    const response = await fetch(decodedUrl);
     const data = await response.text();
 
-    // Return the data and status code from the original source.
+    // If the IPTV server itself sent an error (like 403 Forbidden or 500 Server Error)
+    if (!response.ok) {
+        console.error(`Upstream server error: ${response.status} ${response.statusText}`, data);
+        return {
+            statusCode: response.status,
+            body: `Upstream server returned an error: ${response.statusText}`
+        };
+    }
+
+    // If everything was successful, return the data
     return {
-      statusCode: response.status,
-      // Pass through the original content type.
+      statusCode: 200,
       headers: {
         'Content-Type': response.headers.get('Content-Type') || 'application/json',
       },
       body: data,
     };
   } catch (error) {
-    console.error('Proxy function error:', error);
+    // This will catch timeouts or other function execution errors
+    console.error('Proxy function execution error:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ error: 'The proxy function failed to fetch the URL.' }),
+      body: JSON.stringify({
+        message: 'The proxy function failed to execute.',
+        error: error.message,
+      }),
     };
   }
 };
